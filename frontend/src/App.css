@@ -1,0 +1,436 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Baloo+2:wght@600;700;800&display=swap');
+
+:root {
+  --googly-red: #e8261f;
+  --googly-red-dk: #b9160f;
+  --cream: #fff3d6;
+  --brown: #6e2b12;
+  --amber: #ffb01f;
+  --amber-dk: #f37d10;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: #ffce3a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ============================================================
+   Animated packaging backdrop
+   ============================================================ */
+.bg-stage {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+}
+.bg-stage > div { position: absolute; }
+
+/* warm core glow → deep orange rim */
+.bg-base {
+  inset: -12%;
+  background: radial-gradient(circle at 50% 40%,
+    #ffe98a 0%, #ffd83d 20%, #ffb01f 50%, #ff9415 72%, #f0760d 100%);
+}
+
+/* sunburst rays radiating from the wordmark area */
+.bg-rays {
+  inset: -40%;
+  background: repeating-conic-gradient(from 0deg at 50% 42%,
+    rgba(240,118,13,0)   0deg,
+    rgba(240,118,13,0)   4.6deg,
+    rgba(199,90,6,0.16)  5deg,
+    rgba(199,90,6,0.16)  9.4deg,
+    rgba(240,118,13,0)   10deg);
+  mix-blend-mode: multiply;
+  transform-origin: 50% 42%;
+  animation: spin 110s linear infinite;
+  will-change: transform;
+}
+
+/* concentric rings, warped by the SVG turbulence filter into a hand-drawn swirl */
+.bg-rings {
+  inset: -35%;
+  background: repeating-radial-gradient(circle at 50% 42%,
+    rgba(255,255,255,0)    0px,
+    rgba(255,255,255,0)    30px,
+    rgba(255,234,150,0.55) 30px,
+    rgba(255,234,150,0.55) 40px,
+    rgba(214,98,8,0.0)     40px,
+    rgba(214,98,8,0.22)    52px,
+    rgba(214,98,8,0.0)     64px,
+    rgba(255,255,255,0)    78px);
+  filter: url(#googly-wobble);
+  mix-blend-mode: soft-light;
+  opacity: 0.9;
+  /* opacity-only pulse so the displacement filter isn't re-rasterised each frame */
+  animation: ring-pulse 13s ease-in-out infinite;
+  will-change: opacity;
+}
+
+/* soft central bloom for depth */
+.bg-glow {
+  inset: 0;
+  background: radial-gradient(circle at 50% 38%,
+    rgba(255,255,255,0.55) 0%, rgba(255,255,255,0) 38%);
+  animation: breathe 9s ease-in-out infinite reverse;
+}
+
+/* edge vignette */
+.bg-vignette {
+  inset: 0;
+  background: radial-gradient(circle at 50% 45%,
+    rgba(0,0,0,0) 55%, rgba(140,55,0,0.22) 100%);
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes breathe {
+  0%, 100% { opacity: 0.78; transform: scale(1); }
+  50%      { opacity: 1;    transform: scale(1.035); }
+}
+@keyframes ring-pulse {
+  0%, 100% { opacity: 0.72; }
+  50%      { opacity: 1; }
+}
+
+.svg-defs { position: absolute; width: 0; height: 0; }
+
+/* ============================================================
+   Bisk Farm "25 Years" ribbon badge
+   ============================================================ */
+.brand-badge {
+  position: fixed;
+  top: 18px;
+  left: 18px;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  padding: 9px 14px 11px;
+  background: linear-gradient(180deg, var(--googly-red) 0%, var(--googly-red-dk) 100%);
+  color: var(--cream);
+  border-radius: 10px;
+  border: 2px solid var(--cream);
+  box-shadow: 0 6px 14px rgba(120,20,10,0.4), inset 0 0 0 2px rgba(0,0,0,0.08);
+  transform: rotate(-4deg);
+  font-family: 'Baloo 2', 'Fredoka', sans-serif;
+  text-align: center;
+  line-height: 1;
+}
+.brand-badge::after {
+  /* little ribbon tail */
+  content: '';
+  position: absolute;
+  bottom: -7px; left: 50%;
+  width: 16px; height: 16px;
+  background: var(--googly-red-dk);
+  transform: translateX(-50%) rotate(45deg);
+  border-radius: 3px;
+  z-index: -1;
+}
+.bb-top { font-size: 13px; font-weight: 800; letter-spacing: 1px; }
+.bb-mid { font-size: 8px;  font-weight: 700; letter-spacing: 3px; opacity: 0.92; margin-top: 2px; }
+.bb-big { font-size: 34px; font-weight: 800; line-height: 0.9; text-shadow: 1px 2px 0 rgba(0,0,0,0.25); }
+.bb-bot { font-size: 8px;  font-weight: 700; letter-spacing: 3px; opacity: 0.92; }
+
+/* ============================================================
+   Googly wordmark + googly eyes
+   ============================================================ */
+.logo-container {
+  margin-top: clamp(56px, 13vh, 130px);
+  margin-bottom: 46px;
+  width: fit-content;
+  max-width: 92vw;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.googly-text {
+  font-family: 'Baloo 2', 'Fredoka', cursive, sans-serif;
+  font-weight: 800;
+  font-size: clamp(66px, 13vw, 138px);
+  line-height: 1;
+  letter-spacing: 1px;
+  color: var(--googly-red);
+  display: inline-flex;
+  align-items: center;
+  text-shadow:
+    3px 3px 0 var(--cream),
+   -2px -2px 0 var(--cream),
+    2px -2px 0 var(--cream),
+   -2px  2px 0 var(--cream),
+    4px  5px 0 var(--googly-red-dk),
+    7px  8px 14px rgba(120,20,10,0.45);
+  filter: drop-shadow(0 10px 18px rgba(120,40,0,0.25));
+}
+.googly-text .ltr { display: inline-block; }
+/* playful bounce, like the hand-lettered wrapper */
+.googly-text .ltr:nth-child(1) { transform: rotate(-6deg) translateY(-2px); }
+.googly-text .ltr:nth-child(4) { transform: rotate(7deg)  translateY(4px); font-size: 0.96em; }
+.googly-text .ltr:nth-child(5) { transform: rotate(-4deg) translateY(2px); }
+.googly-text .ltr:nth-child(6) { transform: rotate(8deg)  translateY(5px); }
+
+/* the two "o"s become googly eyes */
+.googly-text .eye {
+  position: relative;
+  width: 0.74em;
+  height: 0.82em;
+  margin: 0 0.015em;
+  background: radial-gradient(circle at 38% 32%, #ffffff 0%, #fff3d6 70%, #ffe2a6 100%);
+  border: 0.085em solid var(--googly-red);
+  border-radius: 50%;
+  box-shadow:
+    0.04em 0.05em 0 var(--googly-red-dk),
+    inset -0.06em -0.08em 0.1em rgba(180,60,20,0.25),
+    0 0.08em 0.16em rgba(120,20,10,0.3);
+  align-self: center;
+  overflow: hidden;
+}
+.googly-text .eye:nth-child(2) { transform: rotate(-5deg) translateY(-3px); }
+.googly-text .eye:nth-child(3) { transform: rotate(4deg)  translateY(3px); }
+/* the dark pupil that rolls around */
+.googly-text .eye i {
+  position: absolute;
+  width: 0.34em;
+  height: 0.34em;
+  top: 34%;
+  left: 33%;
+  background: radial-gradient(circle at 35% 30%, #4a2410 0%, #1f0d04 70%);
+  border-radius: 50%;
+  animation: glance 7s ease-in-out infinite;
+}
+.googly-text .eye:nth-child(3) i { animation-delay: -3.5s; }
+/* glint highlight */
+.googly-text .eye i::after {
+  content: '';
+  position: absolute;
+  top: 12%; left: 14%;
+  width: 32%; height: 32%;
+  background: rgba(255,255,255,0.9);
+  border-radius: 50%;
+}
+@keyframes glance {
+  0%, 100% { transform: translate(0, 0); }
+  20%      { transform: translate(0.16em, 0.04em); }
+  45%      { transform: translate(-0.12em, 0.1em); }
+  70%      { transform: translate(0.06em, -0.08em); }
+}
+
+/* ============================================================
+   "The taste with a twist" tagline — tucked below-left
+   ============================================================ */
+.tagline {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: -0.4em 0 0 0.5em;
+  transform: rotate(-5deg);
+  transform-origin: left top;
+  font-family: 'Fredoka', cursive, sans-serif;
+  color: var(--brown);
+  line-height: 0.95;
+}
+.t-small {
+  font-size: clamp(14px, 2.6vw, 23px);
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+.t-tiny {
+  font-size: clamp(10px, 1.7vw, 14px);
+  font-weight: 600;
+  letter-spacing: 4px;
+  margin: 2px 0 1px;
+}
+.t-twist {
+  position: relative;
+  font-size: clamp(30px, 6vw, 56px);
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-shadow: 1px 1px 0 #ffe9a8, 2px 3px 0 rgba(110,43,18,0.18);
+}
+.t-twist::after {
+  /* hand-drawn underline swash */
+  content: '';
+  position: absolute;
+  left: -3%;
+  right: -8%;
+  bottom: -0.14em;
+  height: 0.13em;
+  background: var(--googly-red);
+  border-radius: 50% 50% 50% 50% / 100% 100% 0 0;
+  transform: rotate(-1.5deg);
+}
+
+/* ============================================================
+   Search box (clean Google-parody white) on warm backdrop
+   ============================================================ */
+.search-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 584px;
+  z-index: 2;
+}
+.search-box-container {
+  display: flex;
+  align-items: center;
+  border: 2px solid var(--cream);
+  border-radius: 26px;
+  height: 50px;
+  padding: 0 16px;
+  background: #fff;
+  z-index: 101;
+  position: relative;
+  box-shadow: 0 6px 16px rgba(120,55,0,0.22);
+}
+.search-box-container:hover,
+.search-box-container.focused {
+  box-shadow: 0 8px 22px rgba(120,55,0,0.32);
+  border-color: var(--amber);
+}
+.search-box-container.focused {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.search-icon svg { width: 21px; height: 21px; fill: var(--amber-dk); margin-right: 11px; }
+.search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 17px;
+  height: 100%;
+  background: transparent;
+  color: #2a1206;
+}
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border-radius: 0 0 26px 26px;
+  box-shadow: 0 10px 22px rgba(120,55,0,0.3);
+  padding: 10px 0;
+  z-index: 100;
+  margin-top: -1px;
+  border: 2px solid var(--amber);
+  border-top: 1px solid #f3e2bd;
+}
+.dropdown-item {
+  padding: 9px 22px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+.dropdown-item:hover, .dropdown-item.active { background-color: #fff6e2; }
+.dropdown-item svg { width: 16px; height: 16px; margin-right: 14px; fill: var(--amber-dk); }
+.dropdown-item span { color: #2a1206; }
+
+/* ============================================================
+   Buttons
+   ============================================================ */
+.search-buttons {
+  margin-top: 32px;
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  z-index: 2;
+}
+.search-button {
+  background-color: var(--googly-red);
+  border: 2px solid var(--googly-red-dk);
+  border-radius: 22px;
+  color: #fff;
+  font-family: 'Fredoka', cursive, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 0 26px;
+  line-height: 27px;
+  height: 44px;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 var(--googly-red-dk);
+  transition: all 0.1s ease-in-out;
+}
+.search-button:hover {
+  background-color: var(--googly-red-dk);
+  transform: translateY(3px);
+  box-shadow: 0 0 0 var(--googly-red-dk);
+}
+
+/* ============================================================
+   Trending chips — warm cream pills
+   ============================================================ */
+.trending-panel { margin-top: 44px; width: 100%; max-width: 584px; z-index: 2; }
+.trending-title {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--brown);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+.trending-chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.trending-chip {
+  background: rgba(255,255,255,0.92);
+  border: 1.5px solid var(--cream);
+  border-radius: 18px;
+  padding: 8px 16px;
+  font-size: 14px;
+  color: #2a1206;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 3px 8px rgba(120,55,0,0.18);
+  transition: transform 0.08s ease, box-shadow 0.12s ease;
+}
+.trending-chip:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(120,55,0,0.28);
+  border-color: var(--amber);
+}
+.trending-chip svg { width: 16px; height: 16px; margin-right: 8px; fill: var(--googly-red); }
+
+/* ============================================================
+   Misc
+   ============================================================ */
+.banner {
+  position: fixed;
+  bottom: 24px;
+  background: #2a1206;
+  color: #fff;
+  padding: 11px 22px;
+  border-radius: 22px;
+  font-size: 14px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.35);
+  animation: fadein 0.3s;
+  z-index: 60;
+}
+@keyframes fadein {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.loading, .error { padding: 10px 22px; color: #8a5a2a; font-size: 14px; }
+.error { color: var(--googly-red); }
+
+/* respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .bg-rays, .bg-rings, .bg-glow, .googly-text .eye i { animation: none; }
+}
+
+/* keep the badge from crowding the wordmark on small screens */
+@media (max-width: 620px) {
+  .brand-badge { transform: rotate(-4deg) scale(0.82); top: 10px; left: 10px; }
+  .logo-container { align-items: center; }
+  .tagline { margin-left: 0; }
+}
