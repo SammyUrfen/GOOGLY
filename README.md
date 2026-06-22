@@ -1,5 +1,9 @@
 # Googly Search Typeahead System
 
+<p align="center">
+  <img src="googly.png" alt="Googly Search Typeahead — live UI with packaging-inspired branding" width="760">
+</p>
+
 Googly is a production-grade Search Typeahead System designed to suggest popular and trending queries dynamically as a user types. It features a React-based frontend, a Spring Boot Java backend, a persistent PostgreSQL database, and a custom-built distributed Redis cache layer utilizing consistent hashing.
 
 **Key capabilities**
